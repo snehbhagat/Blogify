@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const { createHmac, randomBytes } = require('crypto');
+const { createTokenUser , validateToken } = require('../services/authentication');
 
 const usernameSchema = new Schema({
     fullName: {
@@ -45,7 +46,7 @@ usernameSchema.pre('save', function (next) {
 });
 
 //virtual method to compare passwords
-usernameSchema.static('matchPassword' , async function(email , password) {
+usernameSchema.static('matchPasswordAndGenerateToken' , async function(email , password) {
     const user = await this.findOne({ email });
     if (!user) throw new Error('User not found');
 
@@ -57,7 +58,8 @@ usernameSchema.static('matchPassword' , async function(email , password) {
     if (hashedPassword !== userProvidedHash) {
         throw new Error('Invalid password');
     }
-    return user;
+    const token = createTokenUser(user);
+    return token;
 })
 
 const User = model('user', usernameSchema);

@@ -1,6 +1,5 @@
 const JWT = require('jsonwebtoken');
-
-const secret = "$ne#Bh@gat!@#$%"
+const secret = process.env.JWT_SECRET;
 
 function createTokenUser(user){
     const payload = {
@@ -9,12 +8,13 @@ function createTokenUser(user){
         profileImageURL: user.profileImageURL,
         role: user.role,
     };
-    const token = JWT.sign(payload , secret);
-    return token;
+    // Set token expiry for better security
+    return JWT.sign(payload, secret, { expiresIn: '1h' });
 }
+
 function validateToken(token){
-    const payload = JWT.verify(token, secret);
-    return payload;
+    // This will throw an error if token is invalid or expired
+    return JWT.verify(token, secret);
 }
 
 module.exports = {

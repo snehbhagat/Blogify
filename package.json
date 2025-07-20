@@ -2,10 +2,10 @@
   "name": "rest-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node app",
+    "dev": "nodemon app"
   },
   "author": "",
   "license": "ISC",
